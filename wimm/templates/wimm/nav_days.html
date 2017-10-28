@@ -1,0 +1,27 @@
+{% if months %}
+<div class="month">
+    <div id="dd" class="wrapper-dropdown-2">
+        <span>{{ current_day|date:"F" }}</span>
+        <ul class="dropdown">
+            {% for month in months %}
+                {% if month.month != current_day.month %}
+                    <li><a href="{% url 'show_day' current_day.day month.month current_day.year %}">{{ month|date:"F" }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% if days %}
+<div class="paginate">
+    <ul>
+        {% for day in days %}
+            {% if current_day.day == day.day %}
+            <li><a href="{% url 'show_day' day.day day.month day.year  %}" class="active">{{ day.day }}</a></li>
+            {% else %}
+            <li><a href="{% url 'show_day' day.day day.month day.year %}">{{ day.day }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

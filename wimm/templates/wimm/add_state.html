@@ -1,0 +1,41 @@
+{% extends 'wimm/base.html' %}
+{% block title %}Add new State{% endblock %}
+
+{% block one %}
+    <section id="one">
+        <header class="major">
+                <h2>New Day State</h2>
+        </header>
+    </section>
+{% endblock one %}
+
+{% block two %}
+    <section id="two">
+
+            <!-- form -->
+            <form action="." method="post">
+                <div class="row uniform 50%">
+                    {% csrf_token %}
+                    <div class="12u$">
+                        {{ form.as_p }}
+                    </div>
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="12u$">
+                        {{ form.date.errors }}
+                    </div>
+                    <div class="12u$(small)">
+                        <ul class="actions">
+                            <li><input type="submit" value="Add!" class="special" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <!-- form end -->
+    </section>
+{% endblock two %}

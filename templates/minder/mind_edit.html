@@ -1,0 +1,54 @@
+{% extends 'minder/base.html' %}
+{% block title %} Mind Edit {% endblock %}
+{% block content %}
+    <div class="container">
+        {% if form %}
+            <div class="row">
+                <div class="col">
+                    <form action="." method="post" enctype="multipart/form-data" class="mt-3">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="form-group">
+                            {{ form.mind.errors }}
+                            <label for="{{ form.mind.id_for_label }}" class="sr-only">Mind</label>
+                            <textarea class="form-control mb-2" name="{{ form.mind.html_name }}" id="{{ form.mind.auto_id }}" rows="10" required>{{ form.mind.value }}</textarea>
+                        </div>
+                        {% if not form.mind_img.required and form.mind_img.value %}
+                            <div class="form-group" data-toggle="buttons">
+                                <label class="btn btn-primary btn-clear p-1">
+                                    <input type="checkbox" name="mind_img-clear" id="mind_img-clear_id">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </label>
+                                <span>Check to clear current image.</span>
+                            </div>
+                        {% endif %}
+                        <div class="form-group row">
+                            <div class="col-3">
+                                <label id="file-input-label" class="label-input-file btn btn-primary btn-block" for="{{ form.mind_img.id_for_label }}">
+                                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                </label>
+                                <input class="input-file" type="file" name="{{ form.mind_img.html_name }}" id="{{ form.mind_img.auto_id }}">
+                            </div>
+                            <div class="col-9">
+                                <button type="submit" class="btn btn-primary btn-block">Mind it!</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="filetext" class="alert alert-info" role="alert"></div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container">
+                <div class="alert alert-danger mt-3" role="alert">
+                    <strong>Mind doesn't exist.</strong>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

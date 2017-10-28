@@ -1,0 +1,53 @@
+{% extends 'wimm/base.html' %}
+{% block title %}Add new Wimm{% endblock %}
+
+{% block one %}
+    <section id="one">
+        <header class="major">
+                <h2>New Wimm{% if form.pub_date.value %} for {{ form.pub_date.value|date:"j.m.Y" }}{% endif %}</h2>
+        </header>
+    </section>
+{% endblock one %}
+
+{% block two %}
+    <section id="two">
+
+            <!-- form -->
+            <form action="." method="post" enctype="multipart/form-data" class="mt-3">
+                <div class="row uniform 50%">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if form.pub_date %}
+                        <div class="12u0">
+                            {{ form.pub_date.errors }}
+                            <label for="{{ form.pub_date.id_for_label }}" class="sr-only">Date:</label>
+                            <input type="text" name="{{ form.pub_date.html_name }}" id="{{ form.pub_date.auto_id }}" placeholder="Date" value="{{ form.pub_date.value|date:'m/d/Y' }} {{ form.pub_date.value|time:'H:i:s' }}">
+                        </div>
+                    {% endif %}
+                    <div class="12u$">
+                        {{ form.text.errors }}
+                        <label for="{{ form.text.id_for_label }}" class="sr-only">Wimm:</label>
+                        <textarea name="{{ form.text.html_name }}" id="{{ form.text.auto_id }}" rows="10" placeholder="Wimm here..." required>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+                    </div>
+                    <div class="12u$(small)">
+                        <ul class="actions">
+                            <li><input type="submit" value="Wimm!" class="special" /></li>
+                            <li>
+                                <label id="file-input-label" class="button label-input-file" for="{{ form.img.id_for_label }}">
+                                    <i class="icon fa-download" aria-hidden="true"></i> Image
+                                </label>
+                                <input class="input-file" type="file" name="{{ form.img.html_name }}" id="{{ form.img.auto_id }}"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <!-- form end -->
+    </section>
+{% endblock two %}

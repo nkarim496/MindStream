@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+{% load staticfiles %}
+{% load wimm_tags %}
+<!--
+	Strata by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>{% block title %}Strata by HTML5 UP{% endblock title %}</title>
+		<meta charset="utf-8" />
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{% static 'wimm/images/favicon/favicon.ico' %}" type="image/x-icon">
+        <link rel="apple-touch-icon" href="{% static 'wimm/images/favicon/apple-touch-icon.png' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'wimm/images/favicon/apple-touch-icon-72x72.png' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'wimm/images/favicon/apple-touch-icon-114x114.png' %}">
+        <!-- Favicon End -->
+
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="{% static 'wimm/assets/js/ie/html5shiv.js' %}></script><![endif]-->
+		<link rel="stylesheet" href="{% static 'wimm/assets/css/main.css' %}" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="{% static 'wimm/assets/css/ie8.css' %}" /><![endif]-->
+	</head>
+	<body id="top">
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="#" class="image avatar"><img src="{% static 'wimm/images/avatar.jpg' %}" alt="" /></a>
+                    {% navigation current_date %}
+				</div>
+			</header>
+
+		<!-- Main -->
+			<div id="main">
+
+				<!-- One -->
+                {% block one %}
+					<section id="one">
+						<header class="major">
+                            <span class="date">{{ current_date|date:"j.m.Y" }}</span>
+                            {% if day_state %}
+                                <h2>{{ day_state.state }}</h2>
+                            {% endif %}
+						</header>
+					</section>
+                {% endblock one %}
+				<!-- Two -->
+                {% block two %}
+					<section id="two">
+						<div class="row">
+                            {% if wimms %}
+                                {% for wimm in wimms %}
+                                    <article class="6u 12u$(xsmall) work-item">
+                                        <div class="wimm-wrapper">
+                                            {% if wimm.img %}
+                                                <div class="wimm-img">
+                                                    <img src="{{ MEDIA_URL }}{{ wimm.img }}" alt="wimm image" />
+                                                </div>
+                                            {% endif %}
+                                            <div class="wimm-text">
+                                                {% if user.is_authenticated %}
+                                                    <div class="wimm-edit"><a href="#"><span class="icon fa-pencil"></span></a><a href=""><span class="icon fa-trash"></span></a></div>
+                                                {% endif %}
+                                                <h3>{{ wimm.pub_date|time:"H:i" }}</h3>
+                                                <p>{{ wimm.text }}</p>
+                                            </div>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            {% else %}
+                                <article class="6u 12u$(xsmall) work-item">
+                                    <div class="wimm-wrapper">
+                                        <div class="wimm-img">
+                                            <img src="{% static 'wimm/images/no-wimm.jpg' %}" alt="No wimms" />
+                                        </div>
+                                        <div class="wimm-text">
+                                            <h3>Нет виммов сегодня.</h3>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endif %}
+						</div>
+					</section>
+                {% endblock two %}
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+                    <a href="#" class="icon-up"><span class="icon fa-angle-up"></span></a>
+				</div>
+			</footer>
+        {% if user.is_authenticated %}
+            <div class="nav-user">
+                <div class="nav-user-wrapper-dropdown">
+                    <span class="icon fa-bars" id="nu"></span>
+                    <ul class="nav-user-dropdown">
+                        <li><a href="{% url 'add_wimm' %}"><span class="nav-user-link-text">Wimm</span>&nbsp;&nbsp;<span class="icon fa-plus fa-fw"></span></a></li>
+                        <li><a href="{% url 'index' %}"><span class="nav-user-link-text">Home</span>&nbsp;&nbsp;<span class="icon fa-home fa-fw"></span></a></li>
+                        <li><a href="{% url 'show_trash' %}"><span class="nav-user-link-text">Trash</span>&nbsp;&nbsp;<span class="icon fa-trash fa-fw"></span></a></li>
+                        <li><a href="#"><span class="nav-user-link-text">Settings</span>&nbsp;&nbsp;<span class="icon fa-cog fa-fw"></span></a></li>
+                        <li><a href="{% url 'user_logout' %}"><span class="nav-user-link-text">Logout</span>&nbsp;&nbsp;<span class="icon fa-sign-out fa-fw"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+        <!-- UserNavbar -->
+		<!-- Scripts -->
+			<script src="{% static 'wimm/assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'wimm/assets/js/jquery.poptrox.min.js' %}"></script>
+			<script src="{% static 'wimm/assets/js/skel.min.js' %}"></script>
+			<script src="{% static 'wimm/assets/js/util.js' %}"></script>
+			<!--[if lte IE 8]><script src="{% static 'wimm/assets/js/ie/respond.min.js' %}"></script><![endif]-->
+			<script src="{% static 'wimm/assets/js/main.js' %}"></script>
+
+	</body>
+</html>

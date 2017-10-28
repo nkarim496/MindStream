@@ -1,0 +1,52 @@
+{% extends 'wimm/base.html' %}
+{% block title %}Edit Wimm{% endblock %}
+
+{% block one %}
+    <section id="one">
+        <header class="major">
+                <h2>Edit Wimm</h2>
+        </header>
+    </section>
+{% endblock one %}
+
+{% block two %}
+    <section id="two">
+
+            <!-- form -->
+            <form action="." method="post" enctype="multipart/form-data" class="mt-3">
+                <div class="row uniform 50%">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="12u$">
+                        {{ form.text.errors }}
+                        <label for="{{ form.text.id_for_label }}" class="sr-only">Wimm</label>
+                        <textarea name="{{ form.text.html_name }}" id="{{ form.text.auto_id }}" rows="10" placeholder="Wimm here..." required>{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+                    </div>
+                    {% if not form.img.required and form.img.value %}
+                        <div class="12u$">
+                            <input type="checkbox" id="img-clear_id" name="img-clear">
+                            <label for="img-clear_id">Clear:&nbsp;&nbsp;{{ img_name }}</label>
+                        </div>
+                    {% endif %}
+                    <div class="12u$(small)">
+                        <ul class="actions">
+                            <li><input type="submit" value="Save!" class="special" /></li>
+                            <li>
+                                <label id="file-input-label" class="button label-input-file" for="{{ form.img.id_for_label }}">
+                                    <i class="icon fa-download" aria-hidden="true"></i> Image
+                                </label>
+                                <input class="input-file" type="file" name="{{ form.img.html_name }}" id="{{ form.img.auto_id }}"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <!-- form end -->
+    </section>
+{% endblock two %}

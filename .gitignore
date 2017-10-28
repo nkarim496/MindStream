@@ -1,0 +1,11 @@
+.idea/
+__pycache__/
+media/
+wimm_nginx.conf
+db.sqlite3
+test.py
+settings.py
+uwsgi_params
+uwsgi.ini
+wimm.json
+Thumbs.db

@@ -1,0 +1,31 @@
+{% extends 'wimm/base.html' %}
+{% block title %}Login Wimm{% endblock %}
+
+{% block one %}
+    <section id="one">
+        <header class="major">
+                <h2>Welcome my King!</h2>
+        </header>
+    </section>
+{% endblock one %}
+
+{% block two %}
+    <section id="two">
+
+            <!-- form -->
+            <form action="." method="post">
+                <div class="row uniform 50%">
+                    {% csrf_token %}
+                    <div class="12u$">
+                        {{ form.as_p }}
+                    </div>
+                    <div class="12u$(small)">
+                        <ul class="actions">
+                            <li><input type="submit" value="Login!" class="special" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <!-- form end -->
+    </section>
+{% endblock two %}

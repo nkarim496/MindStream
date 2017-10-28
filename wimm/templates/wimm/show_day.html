@@ -1,0 +1,72 @@
+{% extends 'wimm/base.html' %}
+{% load staticfiles %}
+
+{% block title %}Wimms for {{ current_date|date:"j.m.Y" }}{% endblock title %}
+
+{% block one %}
+    <section id="one">
+        <header class="major">
+            <span class="date">{{ current_date|date:"j.m.Y" }}</span>
+            {% if day_state %}
+                <h2>{{ day_state.state }}</h2>
+                {% if user.is_authenticated %}
+                    <div class="state-edit">
+                        <a href="{% url 'edit_state' current_date.day current_date.month current_date.year %}"><span class="icon fa-pencil"></span></a>
+                        <a href="{% url 'del_state' day_state.pk %}"><span class="icon fa-trash"></span></a>
+                    </div>
+                {% endif %}
+            {% else %}
+                {% if user.is_authenticated %}
+                    <div class="state-edit"><a href="{% url 'edit_state' current_date.day current_date.month current_date.year %}"><span class="icon fa-plus"></span></a></div>
+                {% endif %}
+            {% endif %}
+        </header>
+    </section>
+{% endblock one %}
+
+{% block two %}
+    <section id="two">
+        <div class="row">
+            {% if user.is_authenticated %}
+                <div class="12u$ work-item">
+                    <div class="state-edit">
+                        <a href="{% url 'add_wimm_for_date' current_date.day current_date.month current_date.year %}"><span class="icon fa-plus"></span></a>
+                    </div>
+                </div>
+            {% endif %}
+            {% if wimms %}
+                {% for wimm in wimms %}
+                    <article class="12u$ work-item">
+                        <div class="wimm-wrapper">
+                            {% if wimm.img %}
+                                <div class="wimm-img">
+                                    <img src="{{ MEDIA_URL }}{{ wimm.img }}" alt="wimm image" />
+                                </div>
+                            {% endif %}
+                            <div class="wimm-text">
+                                {% if user.is_authenticated %}
+                                    <div class="wimm-edit">
+                                        <a href="{% url 'edit_wimm' wimm.pk %}"><span class="icon fa-pencil"></span></a>
+                                        <a href="{% url 'trash_wimm' wimm.pk %}"><span class="icon fa-trash"></span></a></div>
+                                {% endif %}
+                                <h3>{{ wimm.pub_date|time:"H:i" }}</h3>
+                                <p>{{ wimm.text }}</p>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <article class="12u$ work-item">
+                    <div class="wimm-wrapper">
+                        <div class="wimm-img">
+                            <img src="{% static 'wimm/images/no-wimm.jpg' %}" alt="No wimms" />
+                        </div>
+                        <div class="wimm-text">
+                            <h3>Нет виммов сегодня.</h3>
+                        </div>
+                    </div>
+                </article>
+            {% endif %}
+        </div>
+    </section>
+{% endblock two %}

@@ -1,0 +1,96 @@
+{% extends 'minder/base.html' %}
+{% block title %} Minds {% endblock %}
+{% block content %}
+    {% if userprofile %}
+        <div class="container-fluid px-0">
+            <div class="user-cap"></div>
+            <div class="user-img">
+                <img class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ userprofile.pic }}" alt="user pic">
+            </div>
+            <h3 class="user-name">@{{ userprofile.user.username }}</h3>
+        </div>
+        <div class="container">
+            {% if form %}
+                    {% if mind_added %}
+                        <div class="row">
+                            <div class="col">
+                                <div class="alert alert-success alert-dismissable fade show" role="alert">
+                                    <button type="button" class="close" aria-label="Close" data-dismiss="alert">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Your mind successfully added.</strong>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col">
+                            <form action="." method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="form-group">
+                                    {{ form.mind.errors }}
+                                    <label for="{{ form.mind.id_for_label }}" class="sr-only">Mind</label>
+                                    <textarea class="form-control mb-2" name="{{ form.mind.html_name }}" id="{{ form.mind.auto_id }}" placeholder="Your mind here..." rows="3" required></textarea>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-3">
+                                        <label id="file-input-label" class="label-input-file btn btn-primary btn-block" for="{{ form.mind_img.id_for_label }}">
+                                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                        </label>
+                                        <input class="input-file" type="file" name="{{ form.mind_img.html_name }}" id="{{ form.mind_img.auto_id }}">
+                                    </div>
+                                    <div class="col-9">
+                                        <button type="submit" class="btn btn-primary btn-block">Mind it!</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="filetext" class="alert alert-info" role="alert"></div>
+            {% endif %}
+            {% if minds %}
+                {% for mindbox in minds %}
+                    <div class="mind-wrapper">
+                        <span class="date" >{{ mindbox.0|date:"d.m.Y" }}</span>
+                        {% for mind in mindbox.1 %}
+                            <div class="mind d-flex flex-column">
+                                {% if user.is_authenticated and user.username == userprofile.user.username %}
+                                    <div class="mind-nav">
+                                        <span class="mind-time mind-nav-item">{{ mind.pub_date|time:"H:i" }}</span>
+                                        <a href="{% url 'mind_edit' username=userprofile.user.username mind_id=mind.pk %}" class="mind-edit mind-nav-item">Edit</a>
+                                        <a href="{% url 'mind_delete' username=userprofile.user.username mind_id=mind.pk %}" class="mind-del mind-nav-item">Delete</a>
+                                    </div>
+                                {% else %}
+                                    <div class="time">{{ mind.pub_date|time:"H:i" }}</div>
+                                {% endif %}
+                                {% if mind.mind_img %}
+                                    <div class="mind-img">
+                                        <img src="{{ MEDIA_URL }}{{ mind.mind_img }}" alt="mind img" class="img-fluid">
+                                    </div>
+                                {% endif %}
+                                <div class="text">{{ mind.mind }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>User doesn't have minds.</strong>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="alert alert-danger mt-3" role="alert">
+                <strong>User doesn't exist.</strong>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
